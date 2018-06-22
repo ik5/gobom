@@ -186,3 +186,24 @@ func BytesToSkip(buffer []byte) int {
 }
 
 // TODO: Implement io.Reader detection
+
+//Read is an implementation of io.Reader interface.
+//The bytes are taken from Reader, checking for BOM and removing them if
+//necessary.
+func (r *Reader) Read(buffer []byte) (n int, err error) {
+	if len(buffer) == 0 {
+		return 0, nil
+	}
+
+	// No initialization of the current reader?!
+	if r.buffer == nil {
+		if r.err != nil {
+			newErr := r.err
+			r.err = nil // we reports error, so no need to store it anymore
+			return 0, newErr
+		}
+		return r.reader.Read(buffer)
+	}
+	n = copy(buffer, r.buffer)
+	return n, nil
+}
