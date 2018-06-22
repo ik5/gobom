@@ -155,4 +155,34 @@ func IsUTF32BOM(buffer []byte) bool {
 	return IsUTF32LEBOM(buffer) || IsUTF32BEBOM(buffer)
 }
 
+//DetectBOMTypeFromBuffer detects the BOM type using the "IsUTFXXXXXBOM"
+func DetectBOMTypeFromBuffer(buffer []byte) BOMType {
+	if IsUTF8BOM(buffer) {
+		return UTF8
+	} else if IsUTF16LEBOM(buffer) {
+		return UTF16LE
+	} else if IsUTF16BEBOM(buffer) {
+		return UTF16BE
+	} else if IsUTF32LEBOM(buffer) {
+		return UTF32LE
+	} else if IsUTF32BEBOM(buffer) {
+		return UTF32BE
+	}
+	return Unknown
+}
+
+// BytesToSkip returns the number of bytes to skip in order to "ignore" BOM, or
+// -1 if non found
+func BytesToSkip(buffer []byte) int {
+	BomType := map[BOMType]int{
+		UTF8:    len(UTF8Bom),
+		UTF16LE: len(UTF16LEBom),
+		UTF16BE: len(UTF16BEBom),
+		UTF32LE: len(UTF32LEBom),
+		UTF32BE: len(UTF32BEBom),
+		Unknown: -1,
+	}
+	return BomType[DetectBOMTypeFromBuffer(buffer)]
+}
+
 // TODO: Implement io.Reader detection
