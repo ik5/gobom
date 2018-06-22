@@ -154,3 +154,5 @@ func IsUTF32BEBOM(buffer []byte) bool {
 func IsUTF32BOM(buffer []byte) bool {
 	return IsUTF32LEBOM(buffer) || IsUTF32BEBOM(buffer)
 }
+
+// TODO: Implement io.Reader detection
