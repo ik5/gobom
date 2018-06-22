@@ -13,7 +13,7 @@ This library was created for helping me detect if something contain a BOM, and
 that's it. It does not do anything else, and there is no plan for anything other
 then detecting it.
 
-How does the library works?
+## How does the library works?
 
 The library can use io.Reader, and also "pure" byte slices and rune slices in
 order to detect the type of BOM.
